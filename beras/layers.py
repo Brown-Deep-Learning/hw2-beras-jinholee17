@@ -19,6 +19,8 @@ class Dense(Diffable):
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
         self.inputs = x  # this stores the inputs for backpropagation
+        print("x shape:", x.shape)  # Expected: (batch_size, input_size)
+        print("w shape:", self.w.shape)  # Expected: (input_size, output_size)
         return Tensor(np.matmul(x, self.w) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
