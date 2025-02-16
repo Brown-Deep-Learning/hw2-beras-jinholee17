@@ -21,7 +21,7 @@ class Dense(Diffable):
         self.inputs = x  # this stores the inputs for backpropagation
         print("x shape:", x.shape)  # Expected: (batch_size, input_size)
         print("w shape:", self.w.shape)  # Expected: (input_size, output_size)
-        return Tensor(np.matmul(x, self.w.T) + self.b)
+        return Tensor(np.matmul(x.T, self.w) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
         return [Tensor(self.w)]
