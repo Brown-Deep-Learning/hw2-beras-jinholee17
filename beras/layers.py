@@ -18,15 +18,21 @@ class Dense(Diffable):
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        return Tensor(np.matmul(x,self.w) + self.b)
+        self.inputs = x  # this stores the inputs for backpropagation
+        return Tensor(np.matmul(x, self.w) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
-        return Tensor(self.w.T)
+        return [Tensor(self.w.T)]
+        
 
     def get_weight_gradients(self) -> list[Tensor]:
-        weight_gradient = Tensor(self.inputs[0].T)
-        bias_gradient = Tensor(np.ones((self.b.shape[0],1)))
-        return Tensor(weight_gradient,bias_gradient)
+        # weight_gradient = Tensor(self.inputs[0].T)
+        # bias_gradient = Tensor(np.ones((self.b.shape[0],1)))
+        # return Tensor(weight_gradient,bias_gradient)
+
+        weight_gradient = Tensor(np.matmul(self.inputs.T, np.ones_like(self.b)))
+        bias_gradient = Tensor(np.ones_like(self.b))
+        return [weight_gradient, bias_gradient]
 
     @staticmethod
     def _initialize_weight(initializer, input_size, output_size) -> tuple[Variable, Variable]:
@@ -55,4 +61,17 @@ class Dense(Diffable):
             "kaiming",
         ), f"Unknown dense weight initialization strategy '{initializer}' requested"
 
-        return None, None
+        if initializer == "zero":
+            w = np.zeros((input_size, output_size))
+        elif initializer == "normal":
+            w = np.random.randn(input_size, output_size) * 0.01
+        elif initializer == "xavier":
+            limit = np.sqrt(1 / input_size)
+            w = np.random.uniform(-limit, limit, (input_size, output_size))
+        elif initializer == "kaiming":
+            w = np.random.randn(input_size, output_size) * np.sqrt(2 / input_size)
+        else:
+            raise ValueError(f"Unknown initializer: {initializer}")
+
+        b = np.zeros((1, output_size)) # initalize bias to 0
+        return Variable(w), Variable(b)
