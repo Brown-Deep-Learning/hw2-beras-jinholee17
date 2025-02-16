@@ -67,7 +67,8 @@ class Dense(Diffable):
             w = np.random.randn(input_size, output_size) * 0.01
         elif initializer == "xavier":
             limit = np.sqrt(2 / (input_size + output_size))
-            w = np.random.uniform(-limit, limit, (input_size, output_size))
+            w = np.random.normal(0, limit, (input_size, output_size))
+        
         elif initializer == "kaiming":
             w = np.random.randn(input_size, output_size) * np.sqrt(2 / input_size)
         else:
