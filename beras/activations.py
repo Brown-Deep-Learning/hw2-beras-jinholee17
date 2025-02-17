@@ -54,14 +54,19 @@ class Sigmoid(Activation):
     ## TODO: Implement for default output activation to bind output to 0-1
     
     def forward(self, x) -> Tensor:
-        raise NotImplementedError
+        x = np.array(x)
+        self.inputs = x
+        return Tensor(1 / (1 + np.exp(-x)))
 
     def get_input_gradients(self) -> list[Tensor]:
         """
         To see what methods/variables you have access to, refer to the cheat sheet.
         Hint: Make sure not to mutate any instance variables. Return a new list[tensor(s)]
+        f'(x) = f(x) * (1 - f(x))
         """
-        raise NotImplementedError
+        sigmoid_output = 1 / (1 + np.exp(-self.inputs))
+        grad = sigmoid_output * (1 - sigmoid_output)
+        return [Tensor(grad)]
 
     def compose_input_gradients(self, J):
         return self.get_input_gradients()[0] * J
