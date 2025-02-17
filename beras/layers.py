@@ -26,10 +26,6 @@ class Dense(Diffable):
         
 
     def get_weight_gradients(self) -> list[Tensor]:
-        # weight_gradient = Tensor(self.inputs[0].T)
-        # bias_gradient = Tensor(np.ones((self.b.shape[0],1)))
-        # return Tensor(weight_gradient,bias_gradient)
-
         weight_gradient = Tensor(np.matmul(self.inputs.T, np.ones_like(self.b)))
         bias_gradient = Tensor(np.ones_like(self.b))
         return [weight_gradient, bias_gradient]
