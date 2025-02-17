@@ -85,7 +85,14 @@ class Softmax(Activation):
 
         ## HINT: Use stable softmax, which subtracts maximum from
         ## all entries to prevent overflow/underflow issues
-        raise NotImplementedError
+        x = np.array(x)
+        self.inputs = x
+
+        exps = np.exp(x - np.max(x, axis=-1, keepdims=True))
+        outs = exps / np.sum(exps, axis=-1, keepdims=True)
+
+        self.outputs = outs
+        return Tensor(outs)
 
     def get_input_gradients(self):
         """Softmax input gradients!"""
@@ -94,4 +101,11 @@ class Softmax(Activation):
         grad = np.zeros(shape=(bn, n, n), dtype=x.dtype)
         
         # TODO: Implement softmax gradient
-        raise NotImplementedError
+        
+        for i in range(bn):  # for a sample in batch
+            y_i = y[i].reshape(-1, 1)  # convert it to column vector
+            jacobian = np.outer(y_i, y_i)  # compute outer product
+            np.fill_diagonal(jacobian, y_i.flatten() * (1 - y_i.flatten()))
+            grad[i] = jacobian
+
+        return [Tensor(grad)]
