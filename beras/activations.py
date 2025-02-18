@@ -92,9 +92,8 @@ class Softmax(Activation):
         outs = exps / np.sum(exps, axis=-1, keepdims=True)
 
         self.outputs = outs
-
-        self.inputs = (self.inputs,)
-        self.outputs = (self.outputs,)
+        self.inputs = [self.inputs]
+        self.outputs = [self.outputs]
         return Tensor(outs)
 
     def get_input_gradients(self):
