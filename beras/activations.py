@@ -105,9 +105,8 @@ class Softmax(Activation):
         # TODO: Implement softmax gradient
         
         for i in range(bn):  # for a sample in batch
-            y_i = y[i].reshape(-1, 1)  # convert it to column vector
-            jacobian = np.outer(y_i, y_i)  # compute outer product
-            np.fill_diagonal(jacobian, y_i.flatten() * (1 - y_i.flatten()))
+            y_i = y[i].reshape(-1, 1)
+            jacobian = np.diagflat(y_i) - np.outer(y_i, y_i)
             grad[i] = jacobian
 
         return [Tensor(grad)]
