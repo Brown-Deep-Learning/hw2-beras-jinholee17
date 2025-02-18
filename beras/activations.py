@@ -96,9 +96,9 @@ class Softmax(Activation):
 
     def get_input_gradients(self):
         """Softmax input gradients!"""
-        x, y = (self.inputs + self.outputs)
-        bn, n = x.shape
-        grad = np.zeros(shape=(bn, n, n), dtype=x.dtype)
+        y = self.outputs
+        bn, n = y.shape
+        grad = np.zeros(shape=(bn, n, n), dtype=y.dtype)
         
         # TODO: Implement softmax gradient
         
