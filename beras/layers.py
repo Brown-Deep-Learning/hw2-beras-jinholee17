@@ -22,8 +22,8 @@ class Dense(Diffable):
         return np.matmul(x, self.w) + self.b
 
     def get_input_gradients(self) -> list[Tensor]:
-        return [self.w]
-        
+        #return [self.w]
+        return [np.matmul(np.ones_like(self.inputs), self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
         # weight_gradient = Tensor(np.matmul(self.inputs.T, np.ones_like(self.b)))
