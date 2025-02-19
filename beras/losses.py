@@ -22,7 +22,7 @@ class MeanSquaredError(Loss):
     def get_input_gradients(self) -> list[Tensor]:
         batch_size = self.inputs[0].shape[0]
         grad = -2 * (self.inputs[1] - self.inputs[0]) / batch_size
-        return [Tensor(grad)]
+        return grad
 
 class CategoricalCrossEntropy(Loss):
 
