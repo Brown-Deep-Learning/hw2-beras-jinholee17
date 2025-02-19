@@ -22,19 +22,19 @@ class Dense(Diffable):
         return np.matmul(x, self.w) + self.b
 
     def get_input_gradients(self) -> list[Tensor]:
-        #return [self.w]
-        return [np.matmul(np.ones_like(self.inputs), self.w.T)]
+        return [self.w]
+        # return [np.matmul(np.ones_like(self.inputs), self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
         # weight_gradient = Tensor(np.matmul(self.inputs.T, np.ones_like(self.b)))
-        # weight_gradient = np.matmul(np.expand_dims(self.inputs[0], axis=-1), np.ones(np.expand_dims(self.w, axis=1).shape))
-        # bias_gradient = np.ones_like(self.b)
-        # return [weight_gradient, bias_gradient]
-    
-        grad_output = np.ones_like(self.inputs)
-        weight_gradient = np.matmul(self.inputs.T, grad_output)  
-        bias_gradient = np.sum(grad_output, axis=0, keepdims=True) 
+        weight_gradient = np.matmul(np.expand_dims(self.inputs[0], axis=-1), np.ones(np.expand_dims(self.w, axis=1).shape))
+        bias_gradient = np.ones_like(self.b)
         return [weight_gradient, bias_gradient]
+    
+        # grad_output = np.ones_like(self.inputs)
+        # weight_gradient = np.matmul(self.inputs.T, grad_output)  
+        # bias_gradient = np.sum(grad_output, axis=0, keepdims=True) 
+        # return [weight_gradient, bias_gradient]
 
     @staticmethod
     def _initialize_weight(initializer, input_size, output_size) -> tuple[Variable, Variable]:
